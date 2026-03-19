@@ -1,0 +1,20 @@
+import AuthForm from '@/components/AuthForm'
+import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
+
+export default async function AuthPage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (user) {
+    redirect('/')
+  }
+
+  return (
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <AuthForm />
+      </div>
+    </div>
+  )
+}
