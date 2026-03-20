@@ -27,21 +27,24 @@ export default async function Home() {
   }))
 
   return (
-    <main className="min-h-screen">
-      <div className="container mx-auto px-4 py-12 max-w-3xl">
-        <div className="mb-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-zinc-900 dark:text-white mb-4">
-            Die <span className="text-blue-600">Tagesschau</span> KI-Analyse
+    <main className="min-h-screen pb-20 relative">
+      <div className="container mx-auto px-4 pt-20 pb-16 max-w-4xl">
+        <div className="mb-16 text-center space-y-8 relative z-10">
+          <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-slate-900 dark:text-white leading-[1.1]">
+            Die <span className="text-gradient bg-gradient-to-r from-blue-700 via-blue-500 to-indigo-600 dark:from-blue-400 dark:via-blue-300 dark:to-indigo-400">Tagesschau</span> <br/>
+            KI-Analyse
           </h1>
-          <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Automatisierte politische Medienanalyse der 20-Uhr-Nachrichten. 
-            Wir untersuchen Framing, Bildsprache und gesellschaftliche Narrative.
+            Wir untersuchen Framing, Bildsprache und gesellschaftliche Narrative mit modernster KI.
           </p>
-          <RefreshButton />
+          <div className="pt-4">
+            <RefreshButton />
+          </div>
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 text-red-600 rounded-xl mb-8 border border-red-200">
+          <div className="p-4 bg-red-500/10 text-red-600 dark:text-red-400 rounded-2xl mb-8 border border-red-500/20 glass-card">
             Fehler beim Laden der Daten: {error.message}
           </div>
         )}
