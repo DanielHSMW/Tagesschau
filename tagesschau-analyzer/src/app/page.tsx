@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import AnalysisCard from '@/components/AnalysisCard'
+import RefreshButton from '@/components/RefreshButton'
 import { VideoWithAnalysis } from '@/types'
 
 export const revalidate = 60 // Revalidate cache every 60 seconds
@@ -36,6 +37,7 @@ export default async function Home() {
             Automatisierte politische Medienanalyse der 20-Uhr-Nachrichten. 
             Wir untersuchen Framing, Bildsprache und gesellschaftliche Narrative.
           </p>
+          <RefreshButton />
         </div>
 
         {error && (
