@@ -17,7 +17,14 @@ export default async function Header() {
             Tagesschau<span className="text-gradient bg-gradient-to-r from-blue-600 to-indigo-500">.Analyzer</span>
           </span>
         </Link>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-6">
+          <Link href="/insights" className="hidden sm:flex items-center gap-2 text-slate-600 dark:text-slate-300 font-bold hover:text-blue-600 dark:hover:text-blue-400 transition-colors group">
+            <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40 transition-colors">
+              <Activity className="w-5 h-5 group-hover:hidden" />
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-bar-chart-2 hidden group-hover:block"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
+            </div>
+            Insights & Daten
+          </Link>
           {user ? (
             <div className="flex items-center space-x-4 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md px-4 py-2 rounded-2xl border border-slate-200 dark:border-slate-800">
               <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
