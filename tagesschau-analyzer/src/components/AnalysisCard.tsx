@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import { VideoWithAnalysis } from '@/types'
-import { ChevronDown, Calendar, Youtube, Link as LinkIcon, AlertTriangle } from 'lucide-react'
+import { ChevronDown, Calendar, Youtube, Link as LinkIcon, AlertTriangle, ArrowRight } from 'lucide-react'
 import { format } from 'date-fns'
+import Link from 'next/link'
 import { de } from 'date-fns/locale'
 
 export default function AnalysisCard({ data }: { data: VideoWithAnalysis }) {
@@ -111,6 +112,15 @@ export default function AnalysisCard({ data }: { data: VideoWithAnalysis }) {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Deep-Dive Button */}
+            <div className="pt-4 flex justify-end">
+              <Link href={`/video/${data.id}`} className="group relative flex items-center gap-3 px-8 py-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black tracking-wide overflow-hidden shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 transition-all outline-none focus:ring-4 ring-slate-500/30">
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-600/20 to-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <span className="relative z-10">Vollständige Analyse lesen</span>
+                <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1.5 transition-transform" />
+              </Link>
             </div>
           </div>
         ) : (
