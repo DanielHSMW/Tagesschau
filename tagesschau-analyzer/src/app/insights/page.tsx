@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
-import { Activity, Database, Clock, TrendingUp } from 'lucide-react'
 import NarrativeCharts from '@/components/NarrativeCharts'
 import KeywordCloud from '@/components/KeywordCloud'
+import Link from 'next/link'
+import { Activity, Database, Clock, TrendingUp, ArrowLeft } from 'lucide-react'
 
 export const revalidate = 60 // Cache 60s
 
@@ -59,6 +60,13 @@ export default async function InsightsPage() {
     <main className="min-h-screen pb-20 pt-16 relative">
       <div className="container mx-auto px-4 max-w-6xl">
         
+        <Link href="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 font-bold mb-8 transition-colors group">
+          <div className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40 transition-colors">
+            <ArrowLeft className="w-5 h-5" />
+          </div>
+          Zurück zur Übersicht
+        </Link>
+
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4">

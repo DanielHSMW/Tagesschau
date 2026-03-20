@@ -7,13 +7,14 @@ import Link from 'next/link'
 
 export const revalidate = 60
 
-export default async function VideoPage({ params }: { params: { id: string } }) {
+export default async function VideoPage(props: { params: Promise<{ id: string }> }) {
+  const { id } = await props.params
   const supabase = await createClient()
 
   const { data: video, error } = await supabase
     .from('videos')
     .select(`*, analyses (*)`)
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (error || !video || !video.analyses || (Array.isArray(video.analyses) && video.analyses.length === 0)) {
