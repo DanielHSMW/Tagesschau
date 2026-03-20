@@ -48,7 +48,7 @@ export async function GET(request: Request) {
     }
 
     // 4. Run Gemini Video Understanding Analysis
-    const analysisResult = await analyzeTagesschau(latestVideo.videoId)
+    const analysisResult = await analyzeTagesschau(latestVideo.videoId, latestVideo.description)
 
     // 5. Insert Analysis into DB
     const { data: newAnalysis, error: analysisError } = await supabaseAdmin

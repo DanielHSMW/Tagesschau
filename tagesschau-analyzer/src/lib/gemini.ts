@@ -10,7 +10,7 @@ export interface AnalysisResult {
   right_keypoints: string
 }
 
-export async function analyzeTagesschau(youtubeId: string): Promise<AnalysisResult> {
+export async function analyzeTagesschau(youtubeId: string, fallbackDescription?: string): Promise<AnalysisResult> {
   const youtubeUrl = `https://www.youtube.com/watch?v=${youtubeId}`
   
   let transcriptText = ""
@@ -19,21 +19,15 @@ export async function analyzeTagesschau(youtubeId: string): Promise<AnalysisResu
     transcriptText = transcript.map(t => t.text).join(" ")
   } catch (error) {
     console.warn("Could not fetch YouTube transcript for", youtubeId, error)
-    // Wenn Vercel geblockt wird von YouTube, geben wir lieber einen Fehler aus, anstatt die KI halluzinieren zu lassen.
-    return {
-      summary: "Fehler: YouTube hat den Untertitel-Abruf blockiert (oft der Fall auf Vercel-Servern). Die KI konnte das Video nicht analysieren.",
-      visual_description: "Nicht verfügbar ohne Transkript.",
-      left_keypoints: "Nicht verfügbar ohne Transkript.",
-      right_keypoints: "Nicht verfügbar ohne Transkript."
-    }
   }
 
-  const prompt = `Analysiere die folgende Tagesschau-Ausgabe (Video URL: ${youtubeUrl}).
-Hier ist das Transkript des gesamten Videos:
-"""
-${transcriptText}
-"""
+  // Fallback: If transcript fails, we use the YouTube description (which contains the topics of the show)
+  const contentText = transcriptText 
+    ? `Hier ist das Transkript des gesamten Videos:\n"""\n${transcriptText}\n"""\n\n`
+    : `Hier ist die offizielle Videobeschreibung (Themenübersicht) der Tagesschau:\n"""\n${fallbackDescription}\n"""\n\nDa das komplette Transkript blockiert wurde, stütze deine Analyse bitte ausschließlich auf diese inhaltliche Übersicht der Themen.`;
 
+  const prompt = `Analysiere die folgende Tagesschau-Ausgabe (Video URL: ${youtubeUrl}).
+${contentText}
 Führe basierend darauf eine dezidierte politische Medienanalyse durch. Wir wollen analysieren, inwiefern die Tagesschau systemverteidigende/status-quo-bewahrende Politik macht.
 
 Gebe die Antwort **zwingend** in exakt diesem JSON-Format zurück:

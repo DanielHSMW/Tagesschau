@@ -2,6 +2,7 @@ export interface YouTubeVideoData {
   videoId: string
   title: string
   publishedAt: string
+  description?: string
 }
 
 export async function getLatestPlaylistVideo(): Promise<YouTubeVideoData | null> {
@@ -26,6 +27,7 @@ export async function getLatestPlaylistVideo(): Promise<YouTubeVideoData | null>
     const videoIdMatch = latestEntry.match(/<yt:videoId>(.*?)<\/yt:videoId>/)
     const titleMatch = latestEntry.match(/<title>(.*?)<\/title>/)
     const publishedMatch = latestEntry.match(/<published>(.*?)<\/published>/)
+    const descriptionMatch = latestEntry.match(/<media:description>([\s\S]*?)<\/media:description>/)
 
     if (!videoIdMatch || !titleMatch || !publishedMatch) return null
 
@@ -33,6 +35,7 @@ export async function getLatestPlaylistVideo(): Promise<YouTubeVideoData | null>
       videoId: videoIdMatch[1],
       title: titleMatch[1],
       publishedAt: publishedMatch[1],
+      description: descriptionMatch ? descriptionMatch[1] : ""
     }
   } catch (error) {
     console.error('Error fetching YouTube RSS feed:', error)
