@@ -31,7 +31,7 @@ function VideoFeedSkeleton() {
 
 function NewsTickerSkeleton() {
   return (
-    <div className="glass-card rounded-3xl h-[400px] md:h-[500px] w-full animate-pulse p-6 space-y-6">
+    <div className="glass-card rounded-3xl h-full min-h-[300px] w-full animate-pulse p-6 space-y-6">
       <div className="h-6 bg-slate-200 dark:bg-slate-800 rounded-full w-1/2 mb-8"></div>
       {[...Array(5)].map((_, i) => (
         <div key={i} className="space-y-3 pb-6 border-b border-slate-200/50 dark:border-slate-800/50">
@@ -82,23 +82,33 @@ async function VideoFeed() {
 
   return (
     <div className="space-y-16">
-      {/* Neueste Analyse (Hero Card) */}
-      <section>
-        <div className="flex items-center gap-3 mb-6 pl-2">
-          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-wider">Neueste Sendung</h2>
+      {/* Top Section: Ticker + Neueste Analyse */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        {/* Left Sidebar: News Ticker */}
+        <div className="lg:col-span-4 xl:col-span-3 hidden md:block">
+          <Suspense fallback={<NewsTickerSkeleton />}>
+            <NewsTicker />
+          </Suspense>
         </div>
-        <AnalysisCard data={neuesteVideo} />
+        
+        {/* Right Area: Neueste Analyse */}
+        <div className="lg:col-span-8 xl:col-span-9 flex flex-col">
+          <div className="flex items-center gap-3 mb-6 pl-2">
+            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-wider">Neueste Sendung</h2>
+          </div>
+          <AnalysisCard data={neuesteVideo} />
+        </div>
       </section>
 
-      {/* Archiv */}
+      {/* Bottom Section: Archiv (Full Width) */}
       {archiveVideos.length > 0 && (
         <section>
           <div className="flex items-center gap-3 mb-6 pl-2">
             <h2 className="text-xl font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Vergangene Analysen</h2>
             <div className="flex-1 h-px bg-slate-200 dark:bg-slate-800"></div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-90 hover:opacity-100 transition-opacity">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-90 hover:opacity-100 transition-opacity">
             {archiveVideos.map(video => (
               <AnalysisCard key={video.id} data={video} />
             ))}
@@ -130,22 +140,10 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Sidebar: News Ticker */}
-          <div className="lg:col-span-4 xl:col-span-3 sticky top-28 hidden md:block">
-            <Suspense fallback={<NewsTickerSkeleton />}>
-              <NewsTicker />
-            </Suspense>
-          </div>
-
-          {/* Right Area: Analyses */}
-          <div className="lg:col-span-8 xl:col-span-9">
-            <Suspense fallback={<VideoFeedSkeleton />}>
-              <VideoFeed />
-            </Suspense>
-          </div>
-        </div>
+        {/* Main Content Area */}
+        <Suspense fallback={<VideoFeedSkeleton />}>
+          <VideoFeed />
+        </Suspense>
 
       </div>
     </main>

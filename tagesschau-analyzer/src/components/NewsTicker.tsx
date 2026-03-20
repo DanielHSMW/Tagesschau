@@ -34,7 +34,7 @@ export default async function NewsTicker() {
         The scrolling container needs a fixed max height and hidden overflow.
         We duplicate the items array so the CSS marquee loops seamlessly.
       */}
-      <div className="relative flex-1 overflow-hidden marquee-container h-[400px] md:h-[500px]">
+      <div className="relative flex-1 overflow-hidden marquee-container min-h-[300px]">
         {/* Top/Bottom gradient fade masks to make scrolling look premium */}
         <div className="absolute top-0 w-full h-12 bg-gradient-to-b from-white dark:from-slate-950 to-transparent z-10 pointer-events-none opacity-80"></div>
         <div className="absolute bottom-0 w-full h-16 bg-gradient-to-t from-white dark:from-slate-950 to-transparent z-10 pointer-events-none opacity-80"></div>
