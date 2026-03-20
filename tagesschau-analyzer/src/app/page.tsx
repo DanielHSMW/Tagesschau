@@ -85,10 +85,12 @@ async function VideoFeed() {
       {/* Top Section: Ticker + Neueste Analyse */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
         {/* Left Sidebar: News Ticker */}
-        <div className="lg:col-span-4 xl:col-span-3 hidden md:block">
-          <Suspense fallback={<NewsTickerSkeleton />}>
-            <NewsTicker />
-          </Suspense>
+        <div className="hidden lg:block lg:col-span-4 xl:col-span-3 relative">
+          <div className="absolute inset-0">
+            <Suspense fallback={<NewsTickerSkeleton />}>
+              <NewsTicker />
+            </Suspense>
+          </div>
         </div>
         
         {/* Right Area: Neueste Analyse */}
