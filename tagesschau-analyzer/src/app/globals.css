@@ -67,3 +67,20 @@ body {
   -webkit-text-fill-color: transparent;
   color: transparent;
 }
+
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.animate-marquee-vertical {
+  animation: marquee-vertical 40s linear infinite;
+}
+
+.marquee-container:hover .animate-marquee-vertical {
+  animation-play-state: paused;
+}

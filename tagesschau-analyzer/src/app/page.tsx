@@ -5,6 +5,8 @@ import { VideoWithAnalysis } from '@/types'
 
 import { Suspense } from 'react'
 
+import NewsTicker from '@/components/NewsTicker'
+
 export const revalidate = 60 // Revalidate cache every 60 seconds
 
 // Skeleton Loader Component
@@ -22,11 +24,22 @@ function VideoFeedSkeleton() {
           <div className="h-32 bg-slate-200 dark:bg-slate-800 rounded-2xl w-full"></div>
           <div className="h-32 bg-slate-200 dark:bg-slate-800 rounded-2xl w-full"></div>
         </div>
-        <div className="grid grid-cols-1 gap-4 pt-4">
-          <div className="h-16 bg-slate-200 dark:bg-slate-800 rounded-2xl w-full"></div>
-          <div className="h-16 bg-slate-200 dark:bg-slate-800 rounded-2xl w-full"></div>
-        </div>
       </div>
+    </div>
+  )
+}
+
+function NewsTickerSkeleton() {
+  return (
+    <div className="glass-card rounded-3xl h-[600px] md:h-[800px] w-full animate-pulse p-6 space-y-6">
+      <div className="h-6 bg-slate-200 dark:bg-slate-800 rounded-full w-1/2 mb-8"></div>
+      {[...Array(5)].map((_, i) => (
+        <div key={i} className="space-y-3 pb-6 border-b border-slate-200/50 dark:border-slate-800/50">
+          <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-full w-1/4"></div>
+          <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded-full w-full"></div>
+          <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded-full w-5/6"></div>
+        </div>
+      ))}
     </div>
   )
 }
@@ -99,11 +112,14 @@ async function VideoFeed() {
 export default function Home() {
   return (
     <main className="min-h-screen pb-20 relative">
-      <div className="container mx-auto px-4 pt-20 pb-16 max-w-4xl">
-        <div className="mb-20 text-center space-y-8 relative z-10">
+      <div className="container mx-auto px-4 pt-16 pb-16 max-w-[1400px]">
+        
+        {/* Hero Section */}
+        <div className="mb-20 text-center space-y-8 relative z-10 max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-slate-900 dark:text-white leading-[1.1]">
-            Die <span className="text-gradient bg-gradient-to-r from-blue-700 via-blue-500 to-indigo-600 dark:from-blue-400 dark:via-blue-300 dark:to-indigo-400">Tagesschau</span> <br/>
-            KI-Analyse
+            <span className="text-gradient bg-gradient-to-r from-blue-700 via-blue-500 to-indigo-600 dark:from-blue-400 dark:via-blue-300 dark:to-indigo-400">Tagesschau</span>
+            <br />
+            Analyzer
           </h1>
           <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Automatisierte politische Medienanalyse der 20-Uhr-Nachrichten. 
@@ -114,11 +130,23 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="space-y-8">
-          <Suspense fallback={<VideoFeedSkeleton />}>
-            <VideoFeed />
-          </Suspense>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Sidebar: News Ticker */}
+          <div className="lg:col-span-4 xl:col-span-3 sticky top-28 hidden md:block">
+            <Suspense fallback={<NewsTickerSkeleton />}>
+              <NewsTicker />
+            </Suspense>
+          </div>
+
+          {/* Right Area: Analyses */}
+          <div className="lg:col-span-8 xl:col-span-9">
+            <Suspense fallback={<VideoFeedSkeleton />}>
+              <VideoFeed />
+            </Suspense>
+          </div>
         </div>
+
       </div>
     </main>
   )
