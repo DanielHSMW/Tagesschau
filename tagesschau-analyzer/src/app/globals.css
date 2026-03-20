@@ -27,37 +27,42 @@ body {
 
 /* Custom UI Redesign Utilities */
 
-/* Beautiful slow animated mesh gradient background for the body */
-.bg-mesh-light {
-  background-color: #f8fafc;
-  background-image: 
-    radial-gradient(at 100% 0%, hsla(210, 100%, 93%, 1) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, hsla(350, 100%, 93%, 1) 0px, transparent 50%);
-  background-attachment: fixed;
+:root {
+  --mesh-bg: #f8fafc;
+  --mesh-grad1: hsla(210, 100%, 93%, 1);
+  --mesh-grad2: hsla(350, 100%, 93%, 1);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-shadow: none;
 }
 
-.bg-mesh-dark {
-  background-color: #030712;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --mesh-bg: #030712;
+    --mesh-grad1: hsla(220, 100%, 15%, 0.5);
+    --mesh-grad2: hsla(350, 80%, 15%, 0.4);
+    --glass-bg: rgba(15, 23, 42, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Beautiful slow animated mesh gradient background for the body */
+.bg-mesh {
+  background-color: var(--mesh-bg);
   background-image: 
-    radial-gradient(at 100% 0%, hsla(220, 100%, 15%, 0.5) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, hsla(350, 80%, 15%, 0.4) 0px, transparent 50%);
+    radial-gradient(at 100% 0%, var(--mesh-grad1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, var(--mesh-grad2) 0px, transparent 50%);
   background-attachment: fixed;
 }
 
 /* Smooth glassmorphism for cards */
 .glass-card {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--glass-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-.dark .glass-card {
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 }
 
 /* Beautiful animated sub-gradient text */

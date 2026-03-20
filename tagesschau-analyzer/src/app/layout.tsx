@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de" className="antialiased selection:bg-blue-500/30">
-      <body className={`${inter.className} bg-mesh-light dark:bg-mesh-dark text-slate-900 dark:text-slate-50 min-h-screen flex flex-col transition-colors duration-500 ease-in-out`}>
+      <body className={`${inter.className} bg-mesh text-slate-900 dark:text-slate-50 min-h-screen flex flex-col transition-colors duration-500 ease-in-out`}>
         <Header />
         <div className="flex-grow">
           {children}
