@@ -31,7 +31,7 @@ function VideoFeedSkeleton() {
 
 function NewsTickerSkeleton() {
   return (
-    <div className="glass-card rounded-3xl h-[600px] md:h-[800px] w-full animate-pulse p-6 space-y-6">
+    <div className="glass-card rounded-3xl h-[400px] md:h-[500px] w-full animate-pulse p-6 space-y-6">
       <div className="h-6 bg-slate-200 dark:bg-slate-800 rounded-full w-1/2 mb-8"></div>
       {[...Array(5)].map((_, i) => (
         <div key={i} className="space-y-3 pb-6 border-b border-slate-200/50 dark:border-slate-800/50">
