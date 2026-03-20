@@ -5,6 +5,7 @@ import { sendAnalysisEmail } from '@/lib/resend'
 import { createClient } from '@supabase/supabase-js'
 
 export const maxDuration = 60 // Vercel maximum duration for hobby is 10s, pro is 60s/300s. We set to 60s for analysis.
+export const dynamic = 'force-dynamic'
 
 // Create a service role client to bypass RLS for DB operations
 const supabaseAdmin = createClient(
