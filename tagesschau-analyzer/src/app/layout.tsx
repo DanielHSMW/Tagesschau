@@ -5,6 +5,8 @@ import Header from '@/components/Header'
 
 const inter = Inter({ subsets: ['latin'] })
 
+import { Toaster } from 'sonner'
+
 export const metadata: Metadata = {
   title: 'Tagesschau KI-Analyse',
   description: 'Politische Medienanalyse der Tagesschau durch Google Gemini.',
@@ -22,6 +24,7 @@ export default function RootLayout({
         <div className="flex-grow">
           {children}
         </div>
+        <Toaster position="bottom-right" theme="system" richColors />
       </body>
     </html>
   )

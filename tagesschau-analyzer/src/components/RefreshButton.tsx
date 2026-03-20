@@ -3,34 +3,34 @@
 import { useState } from 'react'
 import { RefreshCw } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export default function RefreshButton() {
   const [isLoading, setIsLoading] = useState(false)
-  const [message, setMessage] = useState('')
   const router = useRouter()
 
   const handleRefresh = async () => {
     setIsLoading(true)
-    setMessage('Suche nach neuem Video...')
+    const toastId = toast.loading('Suche nach neuem Video...')
+    
     try {
       const res = await fetch('/api/process-new-video')
       const data = await res.json()
       
       if (res.ok) {
-        setMessage(data.message || 'Erfolgreich aktualisiert!')
+        if (data.message === 'Video already processed') {
+          toast.info('Die neuste Tagesschau wurde bereits verarbeitet!', { id: toastId })
+        } else {
+          toast.success(data.message || 'Erfolgreich aktualisiert!', { id: toastId })
+          setTimeout(() => {
+            router.refresh()
+          }, 1000)
+        }
       } else {
-        setMessage(`Fehler: ${data.error || 'Unbekannt'}`)
+        toast.error(`Fehler: ${data.error || 'Unbekannt'}`, { id: toastId })
       }
-      
-      // Refresh the page data
-      setTimeout(() => {
-        router.refresh()
-        setTimeout(() => setMessage(''), 3000)
-      }, 1000)
-
     } catch (err) {
-      setMessage('Netzwerkfehler beim Aktualisieren.')
-      setTimeout(() => setMessage(''), 3000)
+      toast.error('Netzwerkfehler beim Aktualisieren.', { id: toastId })
     } finally {
       setIsLoading(false)
     }
@@ -49,13 +49,6 @@ export default function RefreshButton() {
           <span>{isLoading ? 'Verarbeite...' : 'Neuestes Video abrufen'}</span>
         </button>
       </div>
-      {message && (
-        <div className="mt-4 px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-          <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
-            {message}
-          </p>
-        </div>
-      )}
     </div>
   )
 }
