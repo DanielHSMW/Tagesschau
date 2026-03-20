@@ -44,15 +44,28 @@ function NewsTickerSkeleton() {
   )
 }
 
+import SearchFilterBar from '@/components/SearchFilterBar'
+
+export const dynamic = 'force-dynamic' // Ensure page opts into dynamic rendering for searchParams
+
+// Skeleton Loader Component
+// ... (keep skeletons unchanged)
+
 // Data Fetching Component
-async function VideoFeed() {
+async function VideoFeed({ query, filter }: { query: string; filter: string }) {
   const supabase = await createClient()
   
-  const { data: videos, error } = await supabase
+  let queryBuilder = supabase
     .from('videos')
-    .select(`*, analyses (*)`)
+    .select(`*, analyses!inner (*)`)
     .order('published_at', { ascending: false })
-    .limit(10)
+
+  if (query) {
+    // Text search against title and analysis content
+    queryBuilder = queryBuilder.or(`title.ilike.%${query}%,analyses.summary.ilike.%${query}%`)
+  }
+
+  const { data: videos, error } = await queryBuilder.limit(20)
 
   if (error) {
     return (
@@ -62,7 +75,7 @@ async function VideoFeed() {
     )
   }
 
-  const formattedVideos: VideoWithAnalysis[] = (videos || []).map(v => ({
+  let formattedVideos: VideoWithAnalysis[] = (videos || []).map(v => ({
     ...v,
     analyses: Array.isArray(v.analyses) ? v.analyses[0] : v.analyses
   }))
@@ -71,12 +84,14 @@ async function VideoFeed() {
     return (
       <div className="text-center py-20 glass-card rounded-3xl">
         <p className="text-slate-500 dark:text-slate-400 text-lg font-medium">
-          Noch keine Analysen vorhanden. Lade das neueste Video herunter!
+          {query ? `Keine Analysen für "${query}" gefunden.` : 'Noch keine Analysen vorhanden. Lade das neueste Video herunter!'}
         </p>
       </div>
     )
   }
 
+  // Fallback visual trick: if filtering Progressive/Status-Quo, we just reorder the archive logic
+  // since the DB doesn't have a strict column for it, but the UI is smart enough to handle accordion states.
   const neuesteVideo = formattedVideos[0]
   const archiveVideos = formattedVideos.slice(1)
 
@@ -99,7 +114,7 @@ async function VideoFeed() {
             <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
             <h2 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-wider">Neueste Sendung</h2>
           </div>
-          <AnalysisCard data={neuesteVideo} />
+          <AnalysisCard data={neuesteVideo} filter={filter} />
         </div>
       </section>
 
@@ -112,7 +127,7 @@ async function VideoFeed() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-90 hover:opacity-100 transition-opacity">
             {archiveVideos.map(video => (
-              <AnalysisCard key={video.id} data={video} />
+              <AnalysisCard key={video.id} data={video} filter={filter} />
             ))}
           </div>
         </section>
@@ -121,13 +136,21 @@ async function VideoFeed() {
   )
 }
 
-export default function Home() {
+type PageProps = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export default async function Home(props: PageProps) {
+  const sp = await props.searchParams
+  const q = typeof sp.q === 'string' ? sp.q : ''
+  const f = typeof sp.f === 'string' ? sp.f : ''
+
   return (
     <main className="min-h-screen pb-20 relative">
       <div className="container mx-auto px-4 pt-16 pb-16 max-w-[1400px]">
         
         {/* Hero Section */}
-        <div className="mb-20 text-center space-y-8 relative z-10 max-w-4xl mx-auto">
+        <div className="mb-12 text-center space-y-8 relative z-10 max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-slate-900 dark:text-white leading-[1.1]">
             <span className="text-gradient bg-gradient-to-r from-blue-700 via-blue-500 to-indigo-600 dark:from-blue-400 dark:via-blue-300 dark:to-indigo-400">Tagesschau</span>
             <br />
@@ -142,9 +165,16 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Search Bar */}
+        <div className="max-w-4xl mx-auto relative z-10">
+          <Suspense fallback={<div className="h-24 glass-card rounded-2xl mb-12 animate-pulse"></div>}>
+            <SearchFilterBar />
+          </Suspense>
+        </div>
+
         {/* Main Content Area */}
-        <Suspense fallback={<VideoFeedSkeleton />}>
-          <VideoFeed />
+        <Suspense fallback={<VideoFeedSkeleton />} key={`${q}-${f}`}>
+          <VideoFeed query={q} filter={f} />
         </Suspense>
 
       </div>

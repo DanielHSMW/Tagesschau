@@ -7,9 +7,9 @@ import { format } from 'date-fns'
 import Link from 'next/link'
 import { de } from 'date-fns/locale'
 
-export default function AnalysisCard({ data }: { data: VideoWithAnalysis }) {
-  const [isLeftOpen, setIsLeftOpen] = useState(false)
-  const [isRightOpen, setIsRightOpen] = useState(false)
+export default function AnalysisCard({ data, filter }: { data: VideoWithAnalysis; filter?: string }) {
+  const [isLeftOpen, setIsLeftOpen] = useState(filter === 'progressive')
+  const [isRightOpen, setIsRightOpen] = useState(filter === 'status-quo')
 
   const analysis = data.analyses
 
